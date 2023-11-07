@@ -1,0 +1,2 @@
+#Github API using django
+This is my first django project.Here user can search by github usename of the user and the some information of the user will shown, along with the public repos of the user. Repos also have the last updated date and creation date.

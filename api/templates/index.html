@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block bodyblock %}
+<div class="container my-4">
+  <form method="post" id="form1">
+    <div class="search-container row justify-content-center" id="search-container">
+      <div class="col-lg-5">
+        <div class="row">
+          <h3 class="text-center">Find GitHub user information</h3>
+        </div>
+        <div class="row mt-4 justify-content-center">
+          <div class="col-auto">
+            <label for="search" class="col-form-label">Enter username</label>
+          </div>
+
+          <div class="col-5">
+            <input type="text" name="username" id="search" class="form-control" placeholder="eg. abdul-wahid789" />
+
+            <div id="searchHelperBlock" class="form-text text-danger d-none">Invalid Username</div>
+          </div>
+          <div class="col-auto">
+            <button id="search-btn" class="btn btn-success btn-search" type="submit" form="form1">
+              <i class="fa-solid fa-magnifying-glass" id="searchIcon"></i>
+              <span class="spinner-border spinner-border-sm d-none" id="searchLoader" role="status"
+                aria-hidden="true"></span>
+            </button>
+            {% csrf_token %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% if git_user %}
+
+<div class="user-info container row mt-5" id="userInfo">
+  <div class="card col-lg-3">
+    <img class="card-image-top" src={{git_user.avatar_url}} alt="user avater">
+    <div class="card-body">
+      <h5 class="card-title text-center">{{git_user.name}}</h5>
+      <p class="card-text"><i class="fa-sharp fa-solid fa-location-pin me-2"
+          style="color: #292929;"></i>{{git_user.location}}</p>
+      <p class="card-text">Account Created: {{git_user.created_at}}</p>
+      <a href={{git_user.html_url}} class="btn btn-primary w-100 " target="_blank" rel="noopener">Profile</a>
+    </div>
+  </div>
+
+  <div class="col-lg-9" id="user-repo-info">
+    <!-- git repo numbers -->
+    <div class="row justify-content-evenly mt-5">
+      <span class="col-6 col-lg-2 p-2 badge bg-primary">Public Repo {{git_user.public_repos}}</span>
+      <span class="col-6 col-lg-2 p-2 badge bg-secondary">Public Gist {{git_user.public_gists}}</span>
+      <span class="col-6 col-lg-2 p-2 badge bg-success">Followers {{git_user.followers}}</span>
+      <span class="col-6  col-lg-2 p-2 badge bg-danger">Following {{git_user.following}}</span>
+    </div>
+    <!-- public repo -->
+
+    {% if repos %}
+    <div class="mt-5 table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="row" colspan="4" class="text-center fs-3">Public repositories</th>
+          </tr>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Created</th>
+            <th scope="col">Updated</th>
+            <th scope="col">URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in repos %}
+          <tr>
+            <th scope="row">{{item.name}}</th>
+            <td>{{item.created_at}}</td>
+            <td>{{item.updated_at}}</td>
+            <td><a href={{item.html_url}} class="btn btn-outline-primary btn-sm btn-repo" target="_blank"
+                rel="noopener">Visit Repo</a></td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}
